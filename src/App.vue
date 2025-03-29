@@ -1,12 +1,11 @@
-<script>
-export default {};
+<script setup>
+import { RouterView } from "vue-router"; // Import RouterView
 </script>
+
 <template>
-  <h1>Hello, Vue.js!</h1>
+  <div>
+    <router-view />
+  </div>
 </template>
-<style>
-.page {
-  max-width: 400px;
-  margin: auto;
-}
-</style>
+
+<style></style>
