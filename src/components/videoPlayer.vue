@@ -1,5 +1,4 @@
 <template>
-  <!-- Modal Bootstrap -->
   <div
     class="modal fade"
     :class="{ show: show }"
@@ -11,7 +10,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">🎬 {{ movieTitle }}</h5>
-          <!-- Nút đóng (X) rõ ràng hơn -->
+
           <button
             type="button"
             class="btn-close btn-close-custom"
@@ -43,9 +42,10 @@
 export default {
   props: {
     show: Boolean,
-    videoUrl: String, // Link gốc của trailer
-    movieTitle: String, // Tên phim truyền vào
+    videoUrl: String,
+    movieTitle: String,
   },
+  emits: ["close"],
   computed: {
     embedUrl() {
       if (!this.videoUrl) return "";
@@ -80,7 +80,7 @@ export default {
   transition: all 0.3s ease-in-out;
 }
 
-/* Hover để nút X dễ thấy hơn */
+/* Hover để nút X dễ thấy */
 .btn-close-custom:hover {
   background-color: red; /* Chuyển đỏ khi hover */
   transform: scale(1.2); /* Phóng to nhẹ */
