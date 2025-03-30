@@ -19,7 +19,12 @@
           >
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link text-white">Quản lý kho phim</a>
+          <a
+            href="#"
+            class="nav-link text-white"
+            @click="activeComponent = 'MovieManagement'"
+            >Quản lý kho phim</a
+          >
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link text-white">Quản lý suất chiếu</a>
@@ -48,6 +53,7 @@
       <!-- Nội dung hiển thị -->
       <div class="content-area flex-grow-1 overflow-auto p-4">
         <RoomManagement v-if="activeComponent === 'RoomManagement'" />
+        <MovieManagement v-if="activeComponent === 'MovieManagement'" />
       </div>
     </div>
   </div>
@@ -57,6 +63,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import RoomManagement from "@/components/room/roomManagement.vue";
+import MovieManagement from "@/components/movie/movieManagement.vue";
 import { useAuthStore } from "@/store/authStore";
 const activeComponent = ref("RoomManagement");
 const authStore = useAuthStore();
