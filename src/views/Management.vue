@@ -43,7 +43,12 @@
           >
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link text-white">Quản lý tài khoản</a>
+          <a
+            href="#"
+            class="nav-link text-white"
+            @click="activeComponent = 'UserManagement'"
+            >Quản lý tài khoản</a
+          >
         </li>
       </ul>
 
@@ -66,6 +71,7 @@
         <MovieManagement v-if="activeComponent === 'MovieManagement'" />
         <ShowtimeManagement v-if="activeComponent === 'ShowtimeManagement'" />
         <TicketManagement v-if="activeComponent === 'TicketManagement'" />
+        <UserManagement v-if="activeComponent === 'UserManagement'" />
       </div>
     </div>
   </div>
@@ -78,6 +84,7 @@ import RoomManagement from "@/components/room/roomManagement.vue";
 import MovieManagement from "@/components/movie/movieManagement.vue";
 import ShowtimeManagement from "@/components/showtime/showtimeManagement.vue";
 import TicketManagement from "@/components/ticket/ticketManagement.vue";
+import UserManagement from "@/components/user/userManagement.vue";
 import { useAuthStore } from "@/store/authStore";
 const activeComponent = ref("RoomManagement");
 const authStore = useAuthStore();
