@@ -33,6 +33,7 @@
           <td>{{ showtime.price }} VND</td>
           <td>
             <button
+              v-if="new Date(showtime.start_time) > new Date()"
               class="btn btn-warning btn-sm me-2"
               @click="editShowtime(showtime)"
             >
@@ -64,7 +65,7 @@
 import { ref, onMounted } from "vue";
 import showtimeService from "@/services/showtimeService";
 import AlertMessage from "@/components/AlertMessage.vue";
-import ShowtimeForm from "./ShowtimeForm.vue";
+import ShowtimeForm from "./showtimeForm.vue";
 
 export default {
   components: { AlertMessage, ShowtimeForm },
