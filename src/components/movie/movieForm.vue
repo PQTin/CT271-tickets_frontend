@@ -9,15 +9,26 @@
       />
 
       <form @submit.prevent="submitForm">
-        <!-- Tên phim -->
-        <div class="mb-3">
-          <label class="form-label">Tên Phim</label>
-          <input
-            v-model="movie.name"
-            type="text"
-            class="form-control"
-            required
-          />
+        <!-- Tên phim & Ngày phát hành  -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Tên Phim</label>
+            <input
+              v-model="movie.name"
+              type="text"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Ngày Phát Hành</label>
+            <input
+              v-model="movie.release_date"
+              type="date"
+              class="form-control"
+              required
+            />
+          </div>
         </div>
 
         <!-- Thể loại & Thời lượng -->
@@ -42,16 +53,6 @@
           </div>
         </div>
 
-        <!-- Ngày phát hành -->
-        <div class="mb-3">
-          <label class="form-label">Ngày Phát Hành</label>
-          <input
-            v-model="movie.release_date"
-            type="date"
-            class="form-control"
-            required
-          />
-        </div>
         <!-- Mô tả -->
         <div class="mb-3">
           <label class="form-label">Mô Tả</label>
@@ -165,6 +166,7 @@ const submitForm = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1050;
 }
 .modal-content {
   background: white;

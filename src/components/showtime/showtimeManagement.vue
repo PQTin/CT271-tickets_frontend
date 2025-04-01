@@ -1,15 +1,25 @@
 <template>
   <div class="container mt-4">
     <h2 class="mb-4">Quản lý Suất Chiếu</h2>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <button class="btn btn-primary" @click="openShowtimeForm">
+        Thêm Suất Chiếu
+      </button>
+      <div class="input-group" style="width: 350px">
+        <input
+          v-model="searchQuery"
+          class="form-control"
+          placeholder="Tìm kiếm suất chiếu theo phim, phòng, ngày..."
+        />
+        <button class="btn btn-primary">🔍</button>
+      </div>
+    </div>
     <AlertMessage
       v-if="alertMessage"
       :message="alertMessage"
       :type="alertType"
     />
-
-    <button class="btn btn-primary mb-3" @click="openShowtimeForm">
-      Thêm Suất Chiếu
-    </button>
 
     <table class="table table-bordered table-striped" v-if="showtimes.length">
       <thead class="table-dark">
@@ -24,7 +34,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="showtime in showtimes" :key="showtime.id">
+        <tr v-for="showtime in filteredShowtimes" :key="showtime.id">
           <td>{{ showtime.id }}</td>
           <td>{{ showtime.Movie.name }}</td>
           <td>{{ showtime.Room.name }}</td>
@@ -62,7 +72,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import showtimeService from "@/services/showtimeService";
 import AlertMessage from "@/components/AlertMessage.vue";
 import ShowtimeForm from "./showtimeForm.vue";
@@ -76,7 +86,7 @@ export default {
     const showShowtimeForm = ref(false);
     const selectedShowtime = ref(null);
     const authToken = ref(localStorage.getItem("token"));
-
+    const searchQuery = ref("");
     const fetchShowtimes = async () => {
       try {
         const response = await showtimeService.getAllShowtimes();
@@ -128,10 +138,35 @@ export default {
     //   return date.toISOString().slice(0, 16); // Cắt phần giây và múi giờ
     // };
 
+    const filteredShowtimes = computed(() => {
+      if (!searchQuery.value) return showtimes.value;
+
+      // Tách từ khóa theo dấu phẩy, loại bỏ khoảng trắng dư thừa
+      const keywords = searchQuery.value
+        .toLowerCase()
+        .split(",")
+        .map((k) => k.trim());
+
+      return showtimes.value.filter((showtime) => {
+        const movieName = showtime.Movie.name.toLowerCase();
+        const roomName = showtime.Room.name.toLowerCase();
+        const showDate = formatDate(showtime.start_time).toLowerCase();
+
+        // Kiểm tra tất cả từ khóa phải có trong dữ liệu
+        return keywords.every(
+          (keyword) =>
+            movieName.includes(keyword) ||
+            roomName.includes(keyword) ||
+            showDate.includes(keyword)
+        );
+      });
+    });
+
     onMounted(fetchShowtimes);
 
     return {
       showtimes,
+      filteredShowtimes,
       alertMessage,
       alertType,
       deleteShowtime,
@@ -143,6 +178,7 @@ export default {
       fetchShowtimes,
       authToken,
       formatDate,
+      searchQuery,
     };
   },
 };

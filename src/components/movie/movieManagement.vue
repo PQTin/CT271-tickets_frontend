@@ -11,9 +11,19 @@
       Kho phim hiện đang trống.
     </div>
 
-    <button class="btn btn-primary mb-3" @click="openModal(null)">
-      Thêm Phim
-    </button>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <button class="btn btn-primary" @click="openModal(null)">
+        Thêm Phim
+      </button>
+      <div class="input-group" style="width: 350px">
+        <input
+          v-model="searchQuery"
+          class="form-control"
+          placeholder="Tìm theo ID, tên phim hoặc thể loại..."
+        />
+        <button class="btn btn-primary">🔍</button>
+      </div>
+    </div>
 
     <VideoPlayer
       :show="showTrailer"
@@ -36,7 +46,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="movie in movies" :key="movie.id">
+        <tr v-for="movie in filteredMovies" :key="movie.id">
           <td>{{ movie.id }}</td>
           <td>
             <img
@@ -120,6 +130,7 @@ export default {
       showTrailer: false,
       trailerUrl: "",
       movieTitle: "",
+      searchQuery: "",
     };
   },
   methods: {
@@ -176,6 +187,22 @@ export default {
       this.trailerUrl = "";
     },
   },
+  computed: {
+    filteredMovies() {
+      if (!this.searchQuery) {
+        return this.movies; // Nếu không nhập gì, hiển thị toàn bộ danh sách
+      }
+
+      const query = this.searchQuery.toLowerCase();
+      return this.movies.filter((movie) => {
+        return (
+          movie.id.toString().includes(query) || // Tìm theo ID
+          movie.name.toLowerCase().includes(query) || // Tìm theo tên phim
+          movie.genre.toLowerCase().includes(query) // Tìm theo thể loại
+        );
+      });
+    },
+  },
   mounted() {
     this.fetchMovies();
   },
@@ -204,6 +231,7 @@ td {
   white-space: nowrap; /* Không cho nội dung xuống dòng nếu không cần */
 }
 td:nth-child(7) {
+  min-width: 250px;
   max-width: 250px;
   word-wrap: break-word; /* Ngắt dòng khi cần */
   white-space: normal; /* Cho phép xuống dòng */

@@ -3,13 +3,26 @@
     <h2 class="mb-3">
       Quản lý {{ currentRole === "admin" ? "Quản trị viên" : "Khách hàng" }}
     </h2>
-    <button class="btn btn-primary mb-3" @click="toggleRole">
-      {{ currentRole === "admin" ? "Quản lý Người Dùng" : "Quản lý Admin" }}
-    </button>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="d-flex">
+        <button class="btn btn-primary me-2" @click="toggleRole">
+          {{ currentRole === "admin" ? "Quản lý Người Dùng" : "Quản lý Admin" }}
+        </button>
 
-    <button class="btn btn-success mb-3 ms-2" @click="openForm(null)">
-      Thêm tài khoản
-    </button>
+        <button class="btn btn-success" @click="openForm(null)">
+          Thêm tài khoản
+        </button>
+      </div>
+      <div class="input-group" style="width: 350px">
+        <input
+          v-model="searchQuery"
+          class="form-control"
+          placeholder="Tìm kiếm theo tên, email, số điện thoại"
+        />
+        <button class="btn btn-primary">🔍</button>
+      </div>
+    </div>
+
     <AlertMessage
       v-if="alertMessage"
       :message="alertMessage"
@@ -27,7 +40,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users" :key="user.id">
+        <tr v-for="user in filteredUsers" :key="user.id">
           <td>{{ user.id }}</td>
           <td>{{ user.username }}</td>
           <td>{{ user.phone }}</td>
@@ -57,7 +70,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import userService from "@/services/userService";
 import AlertMessage from "@/components/AlertMessage.vue";
 import UserForm from "./userForm.vue";
@@ -66,6 +79,7 @@ export default {
   components: { AlertMessage, UserForm },
   setup() {
     const users = ref([]);
+    const searchQuery = ref("");
     const alertMessage = ref("");
     const alertType = ref("success");
     const currentRole = ref("client");
@@ -122,11 +136,30 @@ export default {
       showForm.value = false;
       selectedUser.value = null;
     };
+    const filteredUsers = computed(() => {
+      if (!searchQuery.value) return users.value;
 
+      // Tách từ khóa theo dấu phẩy, loại bỏ khoảng trắng dư thừa
+      const keywords = searchQuery.value
+        .toLowerCase()
+        .split(",")
+        .map((k) => k.trim());
+
+      return users.value.filter((user) =>
+        keywords.every(
+          (keyword) =>
+            user.username.toLowerCase().includes(keyword) ||
+            user.email.toLowerCase().includes(keyword) ||
+            user.phone.includes(keyword) // Số điện thoại giữ nguyên vì chỉ có số
+        )
+      );
+    });
     onMounted(fetchUsers);
 
     return {
       users,
+      searchQuery,
+      filteredUsers,
       alertMessage,
       alertType,
       deleteUser,
