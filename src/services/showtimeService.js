@@ -11,7 +11,28 @@ const ShowtimeService = {
       return { success: false, message: error.message };
     }
   },
+  async getShowtimesByToday() {
+    try {
+      const response = (await axios.get(API_URL)).data;
+      if (!response.data || response.data.length === 0) {
+        return { success: false, message: "Không có suất chiếu nào." };
+      }
 
+      const today = new Date();
+      const todayStr = today.toISOString().split("T")[0]; // Lấy YYYY-MM-DD
+
+      // Lọc danh sách suất chiếu cho hôm nay
+      const filteredShowtimes = response.data.filter((showtime) => {
+        const startTime = new Date(showtime.start_time);
+        const showtimeDateStr = startTime.toISOString().split("T")[0];
+        return showtimeDateStr === todayStr;
+      });
+
+      return { success: true, data: filteredShowtimes };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  },
   async createShowtime(showtimeData, token) {
     try {
       const response = await axios.post(`${API_URL}/create`, showtimeData, {

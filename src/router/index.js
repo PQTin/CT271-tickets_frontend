@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "@/views/Home.vue";
+import Home from "@/views/home/Home.vue";
+import Auth from "@/views/home/auth.vue";
 import Management from "@/views/Management.vue";
 import { useAuthStore } from "@/store/authStore";
 
@@ -10,6 +11,11 @@ const routes = [
     name: "Management",
     component: Management,
     meta: { requiresAdmin: true },
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Auth,
   },
 ];
 
