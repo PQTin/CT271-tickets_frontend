@@ -67,28 +67,49 @@ export default {
 </script>
 
 <style scoped>
-/* Cải tiến nút đóng (X) */
 .btn-close-custom {
   position: absolute;
   right: 15px;
   top: 15px;
   width: 32px;
   height: 32px;
-  background-color: white; /* Màu nền nổi bật */
+  background-color: white;
   border-radius: 50%;
   opacity: 1;
   transition: all 0.3s ease-in-out;
 }
 
-/* Hover để nút X dễ thấy */
+/* Hover để nút X */
 .btn-close-custom:hover {
-  background-color: red; /* Chuyển đỏ khi hover */
-  transform: scale(1.2); /* Phóng to nhẹ */
+  background-color: red;
+  transform: scale(1.2);
 }
 
 /* Hiệu ứng mở modal */
 .modal.show {
   display: block;
   opacity: 1;
+}
+/* Chỉnh nền modal và chữ */
+.modal-content {
+  background-color: #121212;
+  color: white;
+  border-radius: 8px;
+}
+
+.modal-header {
+  border-bottom: 1px solid #444;
+}
+
+.modal-title {
+  color: white;
+}
+
+.modal-body {
+  background-color: #121212;
+}
+
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.7);
 }
 </style>

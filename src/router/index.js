@@ -1,7 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
+
+import Management from "@/views/Management.vue";
+
 import Home from "@/views/home/Home.vue";
 import Auth from "@/views/home/auth.vue";
-import Management from "@/views/Management.vue";
+import MovieDetail from "@/views/home/movieDetail.vue";
 import { useAuthStore } from "@/store/authStore";
 
 const routes = [
@@ -16,6 +19,11 @@ const routes = [
     path: "/login",
     name: "Login",
     component: Auth,
+  },
+  {
+    path: "/movie/:id",
+    name: "MovieDetail",
+    component: MovieDetail,
   },
 ];
 

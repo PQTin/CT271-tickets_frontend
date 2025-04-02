@@ -33,6 +33,33 @@ const ShowtimeService = {
       return { success: false, message: error.message };
     }
   },
+  async getShowtimesByWeek() {
+    try {
+      const response = (await axios.get(API_URL)).data;
+      if (!response.data || response.data.length === 0) {
+        return { success: false, message: "Không có suất chiếu nào." };
+      }
+
+      const today = new Date();
+      const todayStr = today.toISOString().split("T")[0]; // Lấy YYYY-MM-DD
+
+      const next7Days = new Date();
+      next7Days.setDate(today.getDate() + 7);
+      const next7DaysStr = next7Days.toISOString().split("T")[0]; // Lấy YYYY-MM-DD
+
+      // Lọc danh sách suất chiếu trong khoảng từ hôm nay đến 7 ngày tới
+      const filteredShowtimes = response.data.filter((showtime) => {
+        const startTime = new Date(showtime.start_time);
+        const showtimeDateStr = startTime.toISOString().split("T")[0]; // Lấy YYYY-MM-DD
+        return showtimeDateStr >= todayStr && showtimeDateStr <= next7DaysStr;
+      });
+
+      return { success: true, data: filteredShowtimes };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  },
+
   async createShowtime(showtimeData, token) {
     try {
       const response = await axios.post(`${API_URL}/create`, showtimeData, {

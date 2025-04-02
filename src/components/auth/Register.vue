@@ -132,8 +132,40 @@ const handleRegister = async () => {
 
 .login-card {
   width: 100%;
-  background: white;
+  background: #1e1e1e;
   border-radius: 10px;
   padding: 20px;
+  color: #ffffff;
+  box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+}
+.form-control::placeholder {
+  color: #bbb;
+}
+
+/* Nút đăng ký */
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004494;
+}
+
+.text-primary {
+  color: #ffcc00 !important;
+}
+
+.text-muted {
+  color: #aaaaaa !important;
+}
+
+.text-primary.fw-bold {
+  color: #ff9900 !important;
+}
+
+.text-primary.fw-bold:hover {
+  color: #ffcc00 !important;
 }
 </style>

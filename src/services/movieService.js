@@ -12,6 +12,15 @@ const movieService = {
       throw error.response?.data || "Lỗi khi lấy danh sách phim";
     }
   },
+  // Lấy chi tiết phim theo id
+  async getMovieById(id) {
+    try {
+      const response = await axios.get(`${API_URL}/detail/${id}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || "Lỗi khi lấy chi tiết phim";
+    }
+  },
 
   // Thêm phim mới
   async createMovie(formData, token) {
