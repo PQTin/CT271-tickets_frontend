@@ -59,6 +59,15 @@ const ShowtimeService = {
       return { success: false, message: error.message };
     }
   },
+  // Lấy danh sách ghế trống cho suất chiếu
+  async getSeats(showtimeId) {
+    try {
+      const response = await axios.get(`${API_URL}/seat/${showtimeId}`);
+      return response.data; // Trả về dữ liệu ghế trống
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  },
 
   async createShowtime(showtimeData, token) {
     try {
@@ -91,15 +100,6 @@ const ShowtimeService = {
       const response = await axios.delete(`${API_URL}/delete/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      return response.data;
-    } catch (error) {
-      throw error.response?.data || "Lỗi kết nối đến server";
-    }
-  },
-
-  async getAvailableSeats(showtimeId) {
-    try {
-      const response = await axios.get(`${API_URL}/${showtimeId}`);
       return response.data;
     } catch (error) {
       throw error.response?.data || "Lỗi kết nối đến server";

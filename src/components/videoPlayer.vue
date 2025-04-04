@@ -4,7 +4,7 @@
     :class="{ show: show }"
     :style="{ display: show ? 'block' : 'none' }"
     tabindex="-1"
-    aria-hidden="true"
+    :aria-hidden="show ? 'false' : 'true'"
   >
     <div class="modal-dialog modal-lg">
       <div class="modal-content">

@@ -43,10 +43,17 @@
           <div class="card-body text-center">
             <h4 class="movie-title">{{ showtime.Movie.name }}</h4>
             <button
-              class="btn btn-outline-light btn-sm"
+              class="btn btn-outline-light btn-sm mt-2 me-2"
               @click="toggleDetails(showtime.id)"
             >
               {{ selectedShowtimeId === showtime.id ? "Thu gọn" : "Chi tiết" }}
+            </button>
+            <!-- Thêm nút Mua vé ngay -->
+            <button
+              class="btn btn-outline-light btn-sm mt-2"
+              @click="openSeatSelectionModal(showtime)"
+            >
+              Mua vé
             </button>
           </div>
         </div>
@@ -77,12 +84,24 @@
         </li>
       </ul>
     </nav>
+    <!-- Modal Seat Selection -->
+    <SeatSelection
+      v-if="showSeatSelectionModal"
+      :show="showSeatSelectionModal"
+      :movieTitle="selectedShowtime.Movie.name"
+      :showtimeDate="formatDate(selectedShowtime.start_time)"
+      :showtimeTime="formatTime(selectedShowtime.start_time)"
+      :showtimeId="selectedShowtime.id"
+      :price="Number(selectedShowtime.price)"
+      @close="closeSeatSelectionModal"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
 import showtimeService from "@/services/showtimeService";
+import SeatSelection from "./seatSelection.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -94,6 +113,8 @@ const showtimes = ref([]);
 const selectedShowtimeId = ref(null);
 const currentPage = ref(1);
 const itemsPerPage = 4;
+const selectedShowtime = ref(null);
+const showSeatSelectionModal = ref(false);
 
 const fetchShowtimes = async () => {
   const response = await showtimeService.getShowtimesByWeek();
@@ -109,7 +130,7 @@ const toggleDetails = (id) => {
 };
 
 const formatDate = (date) => new Date(date).toLocaleString("vi-VN");
-
+const formatTime = (date) => new Date(date).toLocaleTimeString("vi-VN");
 const totalPages = computed(() =>
   Math.ceil(showtimes.value.length / itemsPerPage)
 );
@@ -122,6 +143,14 @@ const changePage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
   }
+};
+const openSeatSelectionModal = (showtime) => {
+  selectedShowtime.value = showtime;
+  showSeatSelectionModal.value = true;
+};
+
+const closeSeatSelectionModal = () => {
+  showSeatSelectionModal.value = false;
 };
 </script>
 

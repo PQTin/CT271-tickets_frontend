@@ -11,6 +11,7 @@ export const useAuthStore = defineStore("auth", {
   }),
   getters: {
     isAdmin: (state) => state.role === "admin",
+    userId: (state) => state.user?.user_id,
   },
 
   actions: {

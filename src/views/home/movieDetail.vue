@@ -19,7 +19,10 @@
         </p>
         <p><strong>Mô tả:</strong> {{ movie.description }}</p>
         <!-- Xem trailer -->
-        <button class="btn btn-primary" @click="showTrailer = true">
+        <button
+          class="btn btn-outline-light btn-sm"
+          @click="showTrailer = true"
+        >
           Xem trailer
         </button>
       </div>
@@ -46,6 +49,18 @@
               <p class="card-text">
                 <strong>Giá vé:</strong> {{ showtime.price }} VND
               </p>
+              <button
+                class="btn btn-outline-light btn-sm"
+                @click="
+                  openSeatSelection(
+                    showtime.id,
+                    showtime.start_time,
+                    showtime.price
+                  )
+                "
+              >
+                Mua vé
+              </button>
             </div>
           </div>
         </div>
@@ -63,6 +78,17 @@
       :movieTitle="movie.name"
       @close="showTrailer = false"
     />
+    <!-- Seat Selection Modal -->
+    <SeatSelection
+      v-if="showSeatSelection"
+      :show="showSeatSelection"
+      :movieTitle="movie.name"
+      :showtimeDate="showtimeDate"
+      :showtimeTime="showtimeTime"
+      :showtimeId="showtimeId"
+      :price="Number(price)"
+      @close="showSeatSelection = false"
+    />
   </div>
 </template>
 
@@ -72,16 +98,23 @@ import Header from "@/components/home/header.vue";
 import { useRoute } from "vue-router";
 import movieService from "@/services/movieService";
 import videoPlayer from "@/components/videoPlayer.vue";
+import SeatSelection from "@/components/home/seatSelection.vue";
 
 export default {
   components: {
     Header,
     videoPlayer,
+    SeatSelection,
   },
   data() {
     return {
       movie: null,
       showTrailer: false,
+      showSeatSelection: false,
+      showtimeId: null,
+      showtimeDate: null,
+      showtimeTime: null,
+      price: null,
     };
   },
   methods: {
@@ -96,7 +129,15 @@ export default {
     formatDate(date) {
       return new Date(date).toLocaleString("vi-VN");
     },
+    openSeatSelection(showtimeId, startTime, price) {
+      this.showtimeId = showtimeId;
+      this.showtimeDate = this.formatDate(new Date(startTime)).split(" ")[1]; // Lấy ngày chiếu
+      this.showtimeTime = this.formatDate(new Date(startTime)).split(" ")[0]; // Lấy giờ chiếu
+      this.showSeatSelection = true;
+      this.price = price;
+    },
   },
+
   mounted() {
     const route = useRoute();
     const movieId = route.params.id; // Lấy ID từ route
@@ -152,10 +193,6 @@ export default {
 }
 
 .showtime-time {
-  color: #ffcc00; /* Thêm màu vàng cho giờ chiếu */
-}
-
-.showtime-time:hover {
-  color: #ff9900; /* Màu sắc thay đổi khi hover */
+  color: #ffcc00;
 }
 </style>

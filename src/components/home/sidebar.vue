@@ -23,11 +23,24 @@
         <strong>Phòng:</strong> {{ selectedMovie.room_name }} -
         <strong>Giá:</strong> {{ selectedMovie.price }} VNĐ
       </p>
+
       <button
         @click="$router.push(`/movie/${selectedMovie.id}`)"
-        class="btn btn-danger mt-2"
+        class="btn btn-outline-light btn-sm mt-2 me-2"
       >
         📜 Chi tiết
+      </button>
+      <button
+        class="btn btn-outline-light btn-sm mt-2"
+        @click="
+          openSeatSelection(
+            selectedMovie.id_showtime,
+            selectedMovie.start_time,
+            selectedMovie.price
+          )
+        "
+      >
+        Mua vé ngay
       </button>
     </div>
 
@@ -56,13 +69,26 @@
       </div>
       <button @click="nextSlide" class="carousel-btn right">›</button>
     </div>
+    <!-- Seat Selection Modal -->
+    <SeatSelection
+      v-if="showSeatSelection"
+      :show="showSeatSelection"
+      :movieTitle="selectedMovie.name"
+      :showtimeDate="showtimeDate"
+      :showtimeTime="showtimeTime"
+      :showtimeId="showtimeId"
+      :price="Number(price)"
+      @close="showSeatSelection = false"
+    />
   </div>
 </template>
 
 <script>
 import showtimeService from "@/services/showtimeService";
+import SeatSelection from "@/components/home/seatSelection.vue";
 
 export default {
+  components: { SeatSelection },
   data() {
     return {
       movies: [],
@@ -70,6 +96,11 @@ export default {
       currentIndex: 4, // Đặt vị trí ban đầu ở phần tử 4 (vì ta nhân đôi danh sách để vòng lặp mượt hơn)
       defaultTrailer:
         "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&controls=0&modestbranding=1&showinfo=0&rel=0&loop=1",
+      showSeatSelection: false,
+      showtimeId: null,
+      showtimeDate: null,
+      showtimeTime: null,
+      price: null,
     };
   },
   computed: {
@@ -89,6 +120,7 @@ export default {
         }
 
         this.movies = response.data.map((showtime) => ({
+          id_showtime: showtime.id,
           id: showtime.movie_id,
           name: showtime.Movie?.name || "Không có thông tin",
           description: showtime.Movie?.description || "Không có mô tả",
@@ -148,6 +180,16 @@ export default {
         month: "2-digit",
         year: "numeric",
       });
+    },
+    formatDate(date) {
+      return new Date(date).toLocaleString("vi-VN");
+    },
+    openSeatSelection(showtimeId, startTime, price) {
+      this.showtimeId = showtimeId;
+      this.showtimeDate = this.formatDate(new Date(startTime)).split(" ")[1]; // Lấy ngày chiếu
+      this.showtimeTime = this.formatDate(new Date(startTime)).split(" ")[0]; // Lấy giờ chiếu
+      this.showSeatSelection = true;
+      this.price = price;
     },
   },
   created() {
