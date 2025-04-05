@@ -7,6 +7,7 @@ import Auth from "@/views/home/auth.vue";
 import MovieDetail from "@/views/home/movieDetail.vue";
 import TicketsUser from "@/views/home/ticketsUser.vue";
 import ShowTime from "@/views/home/showTime.vue";
+import Movies from "@/views/home/movies.vue";
 import { useAuthStore } from "@/store/authStore";
 
 const routes = [
@@ -36,6 +37,11 @@ const routes = [
     path: "/showtimes",
     name: "ShowTime",
     component: ShowTime,
+  },
+  {
+    path: "/movies",
+    name: "Movies",
+    component: Movies,
   },
 ];
 
