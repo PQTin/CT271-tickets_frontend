@@ -111,6 +111,7 @@
       @close="showSeatSelection = false"
     />
   </div>
+  <Footer />
 </template>
 
 <script>
@@ -120,10 +121,12 @@ import { useRoute } from "vue-router";
 import movieService from "@/services/movieService";
 import videoPlayer from "@/components/videoPlayer.vue";
 import SeatSelection from "@/components/home/seatSelection.vue";
+import Footer from "@/components/home/footer.vue";
 
 export default {
   components: {
     Header,
+    Footer,
     videoPlayer,
     SeatSelection,
   },

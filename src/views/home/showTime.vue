@@ -119,6 +119,7 @@
       @close="closeSeatSelectionModal"
     />
   </div>
+  <Footer />
 </template>
 
 <script setup>
@@ -127,7 +128,7 @@ import showtimeService from "@/services/showtimeService";
 import SeatSelection from "@/components/home/seatSelection.vue";
 import { useRouter } from "vue-router";
 import Header from "@/components/home/header.vue";
-
+import Footer from "@/components/home/footer.vue";
 const router = useRouter();
 
 const goToMovieDetail = (movieId) => {

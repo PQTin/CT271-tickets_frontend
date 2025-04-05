@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2 class="mb-0">Quản lý Vé</h2>
+      <h2 class="mb-0 text-white">Quản lý Vé</h2>
       <div class="input-group" style="width: 350px">
         <input
           v-model="searchQuery"
@@ -70,7 +70,7 @@
 import { ref, onMounted } from "vue";
 import ticketService from "@/services/ticketService";
 import AlertMessage from "@/components/AlertMessage.vue";
-
+import { useAuthStore } from "@/store/authStore";
 export default {
   components: { AlertMessage },
   setup() {
@@ -80,7 +80,7 @@ export default {
     const filteredTickets = ref([]);
 
     const alertType = ref("success");
-    const authToken = ref(localStorage.getItem("token"));
+    const authToken = ref(useAuthStore().token);
 
     const fetchTickets = async () => {
       try {

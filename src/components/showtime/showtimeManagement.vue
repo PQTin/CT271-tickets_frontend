@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <h2 class="mb-4">Quản lý Suất Chiếu</h2>
+    <h2 class="mb-4 text-white">Quản lý Suất Chiếu</h2>
 
     <div class="d-flex justify-content-between align-items-center mb-3">
       <button class="btn btn-primary" @click="openShowtimeForm">
@@ -76,7 +76,7 @@ import { ref, onMounted, computed } from "vue";
 import showtimeService from "@/services/showtimeService";
 import AlertMessage from "@/components/AlertMessage.vue";
 import ShowtimeForm from "./showtimeForm.vue";
-
+import { useAuthStore } from "@/store/authStore";
 export default {
   components: { AlertMessage, ShowtimeForm },
   setup() {
@@ -85,7 +85,7 @@ export default {
     const alertType = ref("success");
     const showShowtimeForm = ref(false);
     const selectedShowtime = ref(null);
-    const authToken = ref(localStorage.getItem("token"));
+    const authToken = ref(useAuthStore().token);
     const searchQuery = ref("");
     const fetchShowtimes = async () => {
       try {

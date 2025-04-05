@@ -20,6 +20,7 @@
       <h2 class="genre-title">Hoạt hình</h2>
       <MoviesByGenre :genre="'Children'" />
     </section>
+    <Footer />
   </div>
 </template>
 
@@ -28,9 +29,11 @@ import Header from "@/components/home/header.vue";
 import Sidebar from "@/components/home/sidebar.vue";
 import ShowtimesNext7 from "@/components/home/showtimesNext7.vue";
 import MoviesByGenre from "@/components/home/getMoviesByGenre.vue";
+import Footer from "@/components/home/footer.vue";
 export default {
   components: {
     Header,
+    Footer,
     Sidebar,
     ShowtimesNext7,
     MoviesByGenre,

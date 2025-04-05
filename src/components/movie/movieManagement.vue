@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <h2 class="mb-4">Quản lý Phim</h2>
+    <h2 class="mb-4 text-white">Quản lý Phim</h2>
     <AlertMessage
       v-if="alertMessage"
       :message="alertMessage"
@@ -116,17 +116,18 @@ import movieService from "@/services/movieService";
 import MovieForm from "./movieForm.vue";
 import AlertMessage from "@/components/AlertMessage.vue";
 import VideoPlayer from "@/components/videoPlayer.vue";
-
+import { useAuthStore } from "@/store/authStore";
 export default {
   components: { MovieForm, AlertMessage, VideoPlayer },
   data() {
+    const authStore = useAuthStore();
     return {
       movies: [],
       showModal: false,
       selectedMovie: null,
       alertMessage: "",
       alertType: "success",
-      token: localStorage.getItem("token"),
+      token: authStore.token,
       showTrailer: false,
       trailerUrl: "",
       movieTitle: "",
@@ -147,8 +148,7 @@ export default {
     async deleteMovie(id) {
       if (confirm("Bạn có chắc muốn xóa phim này?")) {
         try {
-          const token = localStorage.getItem("token");
-          await movieService.deleteMovie(id, token);
+          await movieService.deleteMovie(id, this.token);
           this.fetchMovies();
           this.alertMessage = "Xóa phim thành công!";
           this.alertType = "success";

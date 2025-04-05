@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <h2 class="mb-3">
+    <h2 class="mb-3 text-white">
       Quản lý {{ currentRole === "admin" ? "Quản trị viên" : "Khách hàng" }}
     </h2>
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -74,7 +74,7 @@ import { ref, onMounted, computed } from "vue";
 import userService from "@/services/userService";
 import AlertMessage from "@/components/AlertMessage.vue";
 import UserForm from "./userForm.vue";
-
+import { useAuthStore } from "@/store/authStore";
 export default {
   components: { AlertMessage, UserForm },
   setup() {
@@ -83,7 +83,7 @@ export default {
     const alertMessage = ref("");
     const alertType = ref("success");
     const currentRole = ref("client");
-    const authToken = ref(localStorage.getItem("token"));
+    const authToken = ref(useAuthStore().token);
     const showForm = ref(false);
     const selectedUser = ref(null);
     const isEdit = ref(false);

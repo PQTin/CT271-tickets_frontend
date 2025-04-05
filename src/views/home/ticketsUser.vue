@@ -85,6 +85,7 @@
       Bạn chưa có vé nào.
     </div>
   </div>
+  <Footer />
 </template>
 
 <script>
@@ -93,10 +94,11 @@ import { useAuthStore } from "@/store/authStore"; // Import store
 import ticketService from "@/services/ticketService"; // Import ticket service
 import { useToast } from "vue-toastification"; // Import toast
 import Header from "@/components/home/header.vue";
-
+import Footer from "@/components/home/footer.vue";
 export default defineComponent({
   components: {
     Header,
+    Footer,
   },
   setup() {
     const authStore = useAuthStore(); // Access auth store

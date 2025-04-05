@@ -63,6 +63,7 @@
       @close="closeTrailer"
     />
   </div>
+  <Footer />
 </template>
 
 <script>
@@ -71,10 +72,11 @@ import { useRouter } from "vue-router";
 import movieService from "@/services/movieService";
 import Header from "@/components/home/header.vue";
 import videoPlayer from "@/components/videoPlayer.vue";
-
+import Footer from "@/components/home/footer.vue";
 export default defineComponent({
   components: {
     Header,
+    Footer,
     videoPlayer,
   },
   setup() {

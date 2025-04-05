@@ -85,6 +85,7 @@
       </form>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script>
@@ -93,9 +94,11 @@ import { useToast } from "vue-toastification";
 import { useAuthStore } from "@/store/authStore";
 import userService from "@/services/userService";
 import Header from "@/components/home/header.vue";
+import Footer from "@/components/home/footer.vue";
 export default {
   components: {
     Header,
+    Footer,
   },
   setup() {
     const toast = useToast();

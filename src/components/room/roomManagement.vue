@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <h2 class="mb-4">Quản lý Phòng</h2>
+    <h2 class="mb-4 text-white">Quản lý Phòng</h2>
     <AlertMessage
       v-if="alertMessage"
       :message="alertMessage"
@@ -49,7 +49,7 @@ import { ref, onMounted } from "vue";
 import roomService from "@/services/roomService";
 import AlertMessage from "@/components/AlertMessage.vue";
 import RoomForm from "./roomForm.vue";
-
+import { useAuthStore } from "@/store/authStore";
 export default {
   components: { AlertMessage, RoomForm },
   setup() {
@@ -57,7 +57,7 @@ export default {
     const alertMessage = ref("");
     const alertType = ref("success");
     const showRoomForm = ref(false);
-    const authToken = ref(localStorage.getItem("token"));
+    const authToken = useAuthStore().token;
 
     const fetchRooms = async () => {
       const response = await roomService.getRooms();
@@ -74,7 +74,7 @@ export default {
       try {
         alertMessage.value = "";
         alertType.value = "success";
-        await roomService.deleteRoom(roomId, authToken.value);
+        await roomService.deleteRoom(roomId, authToken);
         alertMessage.value = "Xóa phòng thành công";
         alertType.value = "success";
         fetchRooms();

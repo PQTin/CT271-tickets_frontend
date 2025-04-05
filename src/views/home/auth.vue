@@ -1,33 +1,37 @@
 <template>
   <Header />
 
-  <div>
+  <div class="content-wrapper">
     <Login />
   </div>
+
+  <Footer />
 </template>
 
 <script>
 import Header from "@/components/home/header.vue";
 import Login from "@/components/auth/Login.vue";
+import Footer from "@/components/home/footer.vue";
 
 export default {
   components: {
     Header,
+    Footer,
     Login,
   },
 };
 </script>
 
 <style scoped>
-div {
-  margin-top: 20px;
-  background-color: #121212; /* Màu nền tối */
-  color: white; /* Màu chữ trắng để dễ đọc */
-  min-height: 100vh; /* Đảm bảo trang phủ kín màn hình */
+/* Wrapper chứa nội dung, đảm bảo nội dung chiếm hết không gian còn lại */
+.content-wrapper {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  overflow: hidden;
+  align-items: center;
+  min-height: calc(100vh - 60px); /* Giảm chiều cao của header nếu có */
+}
+
+footer {
+  margin-top: auto;
 }
 </style>
