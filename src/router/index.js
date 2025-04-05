@@ -8,7 +8,9 @@ import MovieDetail from "@/views/home/movieDetail.vue";
 import TicketsUser from "@/views/home/ticketsUser.vue";
 import ShowTime from "@/views/home/showTime.vue";
 import Movies from "@/views/home/movies.vue";
+import profile from "@/views/home/profile.vue";
 import { useAuthStore } from "@/store/authStore";
+import Profile from "@/views/home/profile.vue";
 
 const routes = [
   { path: "/", name: "Home", component: Home },
@@ -43,6 +45,7 @@ const routes = [
     name: "Movies",
     component: Movies,
   },
+  { path: "/profile", name: "Profile", component: Profile },
 ];
 
 const router = createRouter({
