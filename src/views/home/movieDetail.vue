@@ -49,8 +49,29 @@
               <p class="card-text">
                 <strong>Giá vé:</strong> {{ showtime.price }} VND
               </p>
+              <div
+                v-if="
+                  Number(showtime.booked_seats) ===
+                  Number(showtime.Room.total_seats)
+                "
+                style="color: red"
+              >
+                Hết vé.
+              </div>
+              <div v-else style="color: green">
+                Còn
+                {{
+                  Number(showtime.Room.total_seats) -
+                  Number(showtime.booked_seats)
+                }}
+                vé.
+              </div>
               <button
-                class="btn btn-outline-light btn-sm"
+                v-if="
+                  Number(showtime.booked_seats) !=
+                  Number(showtime.Room.total_seats)
+                "
+                class="btn btn-outline-light btn-sm mt-2"
                 @click="
                   openSeatSelection(
                     showtime.id,
@@ -121,6 +142,7 @@ export default {
     async fetchMovieDetails(id) {
       try {
         const response = await movieService.getMovieById(id);
+        console.log(response.data);
         this.movie = response.data;
       } catch (error) {
         console.error("Lỗi khi lấy thông tin phim:", error.message);

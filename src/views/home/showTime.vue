@@ -1,6 +1,18 @@
 <template>
-  <div class="container mt-4">
-    <h2 class="mb-4 text-white text-center">Danh Sách Suất Chiếu 7 Ngày Tới</h2>
+  <Header />
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="text-white flex-grow-1">Suất Chiếu Hiện Có</h2>
+      <div class="input-group" style="width: 350px">
+        <input
+          type="text"
+          v-model="searchQuery"
+          class="form-control"
+          placeholder="Tìm theo tên phim, ngày chiếu."
+        />
+        <button class="btn btn-primary">🔍</button>
+      </div>
+    </div>
 
     <div class="row justify-content-center">
       <div
@@ -112,8 +124,9 @@
 <script setup>
 import { ref, computed } from "vue";
 import showtimeService from "@/services/showtimeService";
-import SeatSelection from "./seatSelection.vue";
+import SeatSelection from "@/components/home/seatSelection.vue";
 import { useRouter } from "vue-router";
+import Header from "@/components/home/header.vue";
 
 const router = useRouter();
 
@@ -123,12 +136,12 @@ const goToMovieDetail = (movieId) => {
 const showtimes = ref([]);
 const selectedShowtimeId = ref(null);
 const currentPage = ref(1);
-const itemsPerPage = 4;
+const itemsPerPage = 8;
 const selectedShowtime = ref(null);
 const showSeatSelectionModal = ref(false);
 
 const fetchShowtimes = async () => {
-  const response = await showtimeService.getShowtimesByWeek();
+  const response = await showtimeService.getAllShowtimes();
   if (response.success) {
     showtimes.value = response.data.map((showtime) => {
       const bookedSeats = Number(showtime.booked_seats);
@@ -151,11 +164,11 @@ const toggleDetails = (id) => {
 const formatDate = (date) => new Date(date).toLocaleString("vi-VN");
 const formatTime = (date) => new Date(date).toLocaleTimeString("vi-VN");
 const totalPages = computed(() =>
-  Math.ceil(showtimes.value.length / itemsPerPage)
+  Math.ceil(filteredShowtimes.value.length / itemsPerPage)
 );
 const paginatedShowtimes = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
-  return showtimes.value.slice(start, start + itemsPerPage);
+  return filteredShowtimes.value.slice(start, start + itemsPerPage);
 });
 
 const changePage = (page) => {
@@ -171,11 +184,52 @@ const openSeatSelectionModal = (showtime) => {
 const closeSeatSelectionModal = () => {
   showSeatSelectionModal.value = false;
 };
+const searchQuery = ref("");
+const filteredShowtimes = computed(() => {
+  if (!searchQuery.value) return showtimes.value;
+
+  const queryParts = searchQuery.value
+    .split(",")
+    .map((part) => part.trim().toLowerCase());
+
+  return showtimes.value.filter((showtime) => {
+    const movieName = showtime.Movie.name.toLowerCase();
+    const showtimeStart = new Date(showtime.start_time);
+    const showtimeString = showtimeStart.toLocaleString().toLowerCase();
+
+    // Kiểm tra nếu bất kỳ từ khóa nào khớp với tên phim hoặc giờ chiếu
+    return queryParts.every((query) => {
+      const isDate = /\d{1,2}\/\d{1,2}\/\d{4}/.test(query); // Kiểm tra định dạng dd/mm/yyyy
+      const isDayMonth = /\d{1,2}\/\d{1,2}$/.test(query); // kiểm tra dd/mm
+
+      if (isDate) {
+        const [day, month, year] = query
+          .split("/")
+          .map((num) => parseInt(num, 10));
+        const searchDate = new Date(year, month - 1, day); // Chuyển chuỗi thành Date
+        return (
+          showtimeStart.getDate() === searchDate.getDate() &&
+          showtimeStart.getMonth() === searchDate.getMonth() &&
+          showtimeStart.getFullYear() === searchDate.getFullYear()
+        );
+      } else if (isDayMonth) {
+        const [day, month] = query.split("/").map((num) => parseInt(num, 10));
+        return (
+          showtimeStart.getDate() === day &&
+          showtimeStart.getMonth() === month - 1
+        );
+      }
+
+      return movieName.includes(query) || showtimeString.includes(query);
+    });
+  });
+});
 </script>
 
 <style scoped>
 .container {
   background-color: #121212;
+  margin-top: 100px;
   padding: 20px;
   border-radius: 10px;
 }

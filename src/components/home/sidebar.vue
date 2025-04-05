@@ -23,7 +23,16 @@
         <strong>Phòng:</strong> {{ selectedMovie.room_name }} -
         <strong>Giá:</strong> {{ selectedMovie.price }} VNĐ
       </p>
-
+      <div
+        v-if="selectedMovie.booked_seats === selectedMovie.total_seats"
+        style="color: red"
+      >
+        Hết vé.
+      </div>
+      <div v-else style="color: green">
+        Còn
+        {{ selectedMovie.total_seats - selectedMovie.booked_seats }} vé.
+      </div>
       <button
         @click="$router.push(`/movie/${selectedMovie.id}`)"
         class="btn btn-outline-light btn-sm mt-2 me-2"
@@ -31,6 +40,7 @@
         📜 Chi tiết
       </button>
       <button
+        v-if="selectedMovie.booked_seats != selectedMovie.total_seats"
         class="btn btn-outline-light btn-sm mt-2"
         @click="
           openSeatSelection(
@@ -129,6 +139,8 @@ export default {
           start_time: showtime.start_time,
           room_name: showtime.Room?.name || "Chưa xác định",
           price: showtime.price || "Chưa có giá",
+          booked_seats: Number(showtime.booked_seats),
+          total_seats: Number(showtime.Room.total_seats),
         }));
 
         if (this.movies.length > 0) {
