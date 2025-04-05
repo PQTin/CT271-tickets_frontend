@@ -5,6 +5,7 @@ import Management from "@/views/Management.vue";
 import Home from "@/views/home/Home.vue";
 import Auth from "@/views/home/auth.vue";
 import MovieDetail from "@/views/home/movieDetail.vue";
+import TicketsUser from "@/views/home/ticketsUser.vue";
 import { useAuthStore } from "@/store/authStore";
 
 const routes = [
@@ -24,6 +25,11 @@ const routes = [
     path: "/movie/:id",
     name: "MovieDetail",
     component: MovieDetail,
+  },
+  {
+    path: "/tickets",
+    name: "TicketsUser",
+    component: TicketsUser,
   },
 ];
 
