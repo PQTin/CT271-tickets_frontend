@@ -62,18 +62,15 @@ const ShowtimeService = {
         return { success: false, message: "Không có suất chiếu nào." };
       }
 
-      const today = new Date();
-      const todayStr = today.toISOString().split("T")[0]; // Lấy YYYY-MM-DD
-
+      const now = new Date();
       const next7Days = new Date();
-      next7Days.setDate(today.getDate() + 7);
-      const next7DaysStr = next7Days.toISOString().split("T")[0]; // Lấy YYYY-MM-DD
+      next7Days.setDate(now.getDate() + 7);
 
-      // Lọc danh sách suất chiếu trong khoảng từ hôm nay đến 7 ngày tới
+      // Lọc các suất chiếu có thời gian kết thúc lớn hơn giờ hiện tại và thời gian bắt đầu nhỏ hơn hoặc bằng thời gian hiện tại cộng 7 ngày
       const filteredShowtimes = response.data.filter((showtime) => {
+        const endTime = new Date(showtime.end_time);
         const startTime = new Date(showtime.start_time);
-        const showtimeDateStr = startTime.toISOString().split("T")[0]; // Lấy YYYY-MM-DD
-        return showtimeDateStr >= todayStr && showtimeDateStr <= next7DaysStr;
+        return endTime > now && startTime <= next7Days;
       });
 
       return { success: true, data: filteredShowtimes };
