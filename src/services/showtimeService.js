@@ -11,6 +11,27 @@ const ShowtimeService = {
       return { success: false, message: error.message };
     }
   },
+  async getUpcomingShowtimes() {
+    try {
+      const response = (await axios.get(API_URL)).data;
+      if (!response.data || response.data.length === 0) {
+        return { success: false, message: "Không có suất chiếu nào." };
+      }
+
+      const now = new Date();
+
+      // Lọc các suất chiếu mà thời gian kết thúc vẫn còn ở tương lai
+      const upcomingShowtimes = response.data.filter((showtime) => {
+        const endTime = new Date(showtime.end_time);
+        return endTime > now;
+      });
+
+      return { success: true, data: upcomingShowtimes };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  },
+
   async getShowtimesByToday() {
     try {
       const response = (await axios.get(API_URL)).data;
@@ -24,8 +45,9 @@ const ShowtimeService = {
       // Lọc danh sách suất chiếu cho hôm nay
       const filteredShowtimes = response.data.filter((showtime) => {
         const startTime = new Date(showtime.start_time);
+        const endTime = new Date(showtime.end_time);
         const showtimeDateStr = startTime.toISOString().split("T")[0];
-        return showtimeDateStr === todayStr;
+        return showtimeDateStr === todayStr && endTime > today;
       });
 
       return { success: true, data: filteredShowtimes };

@@ -142,7 +142,7 @@ const selectedShowtime = ref(null);
 const showSeatSelectionModal = ref(false);
 
 const fetchShowtimes = async () => {
-  const response = await showtimeService.getAllShowtimes();
+  const response = await showtimeService.getUpcomingShowtimes();
   if (response.success) {
     showtimes.value = response.data.map((showtime) => {
       const bookedSeats = Number(showtime.booked_seats);
